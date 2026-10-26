@@ -12,6 +12,16 @@ PayAgent Core is an autonomous Agent-to-Agent (A2A) commerce execution and escro
 
 ---
 
+## 🎬 Live Interactive Walkthrough
+
+<p align="center">
+  <img src="docs/assets/demo.gif" alt="PayAgent Core EscrowGuard Interactive Walkthrough" width="900px" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); border: 1px solid #30363d;" />
+</p>
+
+> **Autonomous Escrow Governance**: High-value transactions trigger the Human-in-the-Loop (HITL) cryptographic approval gate; funds are held in PayPal Escrow until verified proof of delivery is received. Supports switchable Light/Dark modes with real-time audit ledger.
+
+---
+
 ## 🏛️ System Architecture
 
 ```mermaid
