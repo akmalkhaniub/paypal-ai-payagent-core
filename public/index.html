@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PayAgent Core — Autonomous Commerce & EscrowGuard Console</title>
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary: #003087;
+      --primary-hover: #002266;
+      --accent-cyan: #0284c7;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --badge-bg: #e0f2fe;
+      --badge-text: #0369a1;
+      --code-bg: #f1f5f9;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #090d16;
+      --bg-card: #131a29;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --primary: #0070ba;
+      --primary-hover: #005ea6;
+      --accent-cyan: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --badge-bg: rgba(56, 189, 248, 0.12);
+      --badge-text: #38bdf8;
+      --code-bg: #0d131f;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+      --shadow-md: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 40px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #003087 0%, #0070ba 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .controls-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .metric-val {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-sub {
+      font-size: 12px;
+      color: var(--success);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Main Grid */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: var(--code-bg);
+      border-color: var(--text-muted);
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      filter: brightness(0.9);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-held { background: rgba(217, 119, 6, 0.15); color: var(--warning); border: 1px solid rgba(217, 119, 6, 0.3); }
+    .badge-released { background: rgba(22, 163, 74, 0.15); color: var(--success); border: 1px solid rgba(22, 163, 74, 0.3); }
+    .badge-fastpath { background: var(--badge-bg); color: var(--badge-text); }
+
+    /* Orders Table */
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .orders-table th {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .orders-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    /* Accordion */
+    details {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 14px;
+    }
+
+    summary {
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--accent-cyan);
+    }
+
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+      color: var(--text-main);
+    }
+
+    .alert-box {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .alert-hitl {
+      background: rgba(217, 119, 6, 0.12);
+      border: 1px solid var(--warning);
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">P</div>
+        <div>
+          <h1>PayAgent Core — EscrowGuard Console</h1>
+          <p>Autonomous Agentic Commerce & Human-in-the-Loop Settlement Protocol</p>
+        </div>
+      </div>
+      <div class="controls-top">
+        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span id="themeIcon">☀️</span> Light Mode
+        </button>
+      </div>
+    </header>
+
+    <!-- Primary Metrics (Inverted Hierarchy) -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-title">Escrow Vault Held</div>
+        <div class="metric-val" id="metricHeldUSD">$0.00</div>
+        <div class="metric-sub">Protected by PolicyGuard</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Total Settled</div>
+        <div class="metric-val" id="metricSettledUSD">$0.00</div>
+        <div class="metric-sub">Verified Proofs of Fulfillment</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Autonomous Fast-Path Limit</div>
+        <div class="metric-val">$100.00</div>
+        <div class="metric-sub">Instant zero-friction execution</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Active Orders</div>
+        <div class="metric-val" id="metricOrderCount">0</div>
+        <div class="metric-sub">MCP 2026 Compatible</div>
+      </div>
+    </div>
+
+    <!-- Active HITL Alert Banner -->
+    <div id="hitlAlert" class="alert-box alert-hitl">
+      <strong>⚠️ Human Approval Required:</strong> An agent proposed a high-value transaction.
+      <div id="hitlDesc" style="margin: 6px 0;"></div>
+      <button id="hitlConfirmBtn" class="btn btn-warning" style="padding: 6px 12px; font-size: 12px; margin-top: 4px;">
+        ✍️ Sign & Approve Transaction
+      </button>
+    </div>
+
+    <div class="grid-layout">
+      <!-- Section 1: Agent Purchase Trigger -->
+      <div class="card">
+        <div class="card-title">
+          <span>🛒 Autonomous Purchase Simulator</span>
+          <span class="badge badge-fastpath">Agent Initiated</span>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+          Simulate an autonomous buyer agent acquiring cloud infrastructure or SaaS subscriptions via PayPal API.
+        </p>
+
+        <label for="merchantSelect">Target Merchant</label>
+        <select id="merchantSelect">
+          <option value="merch_aws|Amazon Web Services">AWS Cloud Services (Allowlisted)</option>
+          <option value="merch_github|GitHub Copilot Enterprise">GitHub Copilot (Allowlisted)</option>
+          <option value="merch_openai|OpenAI API Platform">OpenAI Platform (Allowlisted)</option>
+          <option value="merch_untrusted_cloud|Untrusted Rogue Host">Untrusted Rogue Host (Triggers HITL Gate)</option>
+        </select>
+
+        <label for="itemDesc">Item Description</label>
+        <input type="text" id="itemDesc" value="Dedicated Inference GPU Cluster (1 Hour)" />
+
+        <label for="amountInput">Purchase Amount (USD)</label>
+        <input type="number" id="amountInput" value="45.00" step="5.0" />
+
+        <div style="display: flex; gap: 8px;">
+          <button id="checkoutBtn" class="btn">🚀 Dispatch Agent Checkout</button>
+          <button id="quick150Btn" class="btn btn-secondary" title="Test High-Value (> $100) HITL Trigger">Test > $100 Gate</button>
+        </div>
+
+        <details>
+          <summary>🔍 Inspect MCP JSON-RPC Wire Envelope</summary>
+          <pre id="mcpLog">// Wire logs will stream here on execution...</pre>
+        </details>
+      </div>
+
+      <!-- Section 2: Escrow Fulfillment & Delivery Verifier -->
+      <div class="card">
+        <div class="card-title">
+          <span>📦 Proof-of-Fulfillment Verifier</span>
+          <span class="badge badge-fastpath">Settlement Gate</span>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+          Funds remain held in PayPal Escrow until the buyer agent validates cryptographic delivery receipts.
+        </p>
+
+        <label for="escrowOrderSelect">Select Escrow Order to Release</label>
+        <select id="escrowOrderSelect">
+          <option value="">No active orders in escrow</option>
+        </select>
+
+        <label for="deliveryProofInput">Cryptographic Delivery Proof (SHA-256)</label>
+        <input type="text" id="deliveryProofInput" value="sha256-receipt-fulfillment-verified-9801" />
+
+        <button id="releaseEscrowBtn" class="btn btn-success">✅ Verify Proof & Release Payout</button>
+
+        <details>
+          <summary>📜 Escrow State Machine Specification</summary>
+          <pre>State: HELD_IN_ESCROW 
+  -> On verify_delivery_receipt(hash)
+  -> Checksum verification passed
+  -> PayPal Orders v2 CAPTURE executed
+  -> Status: RELEASED_TO_MERCHANT</pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- Escrow Registry Ledger -->
+    <div class="card">
+      <div class="card-title">
+        <span>📋 EscrowGuard Ledger & Audit Trail</span>
+        <button id="refreshLedgerBtn" class="btn btn-secondary" style="font-size: 12px; padding: 4px 10px;">↻ Refresh</button>
+      </div>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Merchant</th>
+            <th>Item</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Escrow State</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody">
+          <tr>
+            <td colspan="6" style="text-align: center; color: var(--text-muted);">No orders recorded yet. Trigger a simulated purchase above.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Theme Switcher with localStorage persistence
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const savedTheme = localStorage.getItem('payagent_theme') || 'dark';
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = '<span id="themeIcon">☀️</span> Light Mode';
+        localStorage.setItem('payagent_theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.innerHTML = '<span id="themeIcon">🌙</span> Dark Mode';
+        localStorage.setItem('payagent_theme', 'light');
+      }
+    }
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      setTheme(isDark ? 'light' : 'dark');
+    });
+
+    let pendingApprovalToken = null;
+    let pendingRequest = null;
+
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/orders');
+        const data = await res.json();
+        const orders = data.orders || [];
+
+        let heldUSD = 0;
+        let settledUSD = 0;
+        const body = document.getElementById('ordersBody');
+        const select = document.getElementById('escrowOrderSelect');
+
+        select.innerHTML = '';
+        if (orders.length === 0) {
+          body.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No orders recorded yet.</td></tr>';
+          select.innerHTML = '<option value="">No active orders in escrow</option>';
+        } else {
+          body.innerHTML = '';
+          orders.forEach(o => {
+            if (o.escrowStatus === 'HELD_IN_ESCROW') heldUSD += o.amountUSD;
+            if (o.escrowStatus === 'RELEASED_TO_MERCHANT') settledUSD += o.amountUSD;
+
+            const badgeClass = o.escrowStatus === 'HELD_IN_ESCROW' ? 'badge-held' : 'badge-released';
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><code>${o.id}</code></td>
+              <td><strong>${o.merchantId}</strong></td>
+              <td>${o.referenceId}</td>
+              <td><strong>$${o.amountUSD.toFixed(2)}</strong></td>
+              <td><span class="badge badge-fastpath">${o.status}</span></td>
+              <td><span class="badge ${badgeClass}">${o.escrowStatus}</span></td>
+            `;
+            body.appendChild(row);
+
+            if (o.escrowStatus === 'HELD_IN_ESCROW') {
+              const opt = document.createElement('option');
+              opt.value = o.id;
+              opt.textContent = `${o.id} — $${o.amountUSD} (${o.merchantId})`;
+              select.appendChild(opt);
+            }
+          });
+        }
+
+        document.getElementById('metricHeldUSD').textContent = `$${heldUSD.toFixed(2)}`;
+        document.getElementById('metricSettledUSD').textContent = `$${settledUSD.toFixed(2)}`;
+        document.getElementById('metricOrderCount').textContent = orders.length;
+
+      } catch (err) {
+        console.error('Failed to load orders', err);
+      }
+    }
+
+    async function triggerPurchase(amount, merchant, item, token) {
+      const parts = merchant.split('|');
+      const merchantId = parts[0];
+      const merchantName = parts[1];
+
+      document.getElementById('mcpLog').textContent = 'Initiating MCP tool call: request_escrow_checkout...';
+
+      const res = await fetch('/api/simulate-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          merchantId,
+          merchantName,
+          itemDescription: item,
+          amountUSD: amount,
+          humanApprovalToken: token
+        })
+      });
+
+      const data = await res.json();
+      document.getElementById('mcpLog').textContent = JSON.stringify(data, null, 2);
+
+      if (data.status === 'BLOCKED_PENDING_HITL') {
+        pendingApprovalToken = data.approvalTokenRequired;
+        pendingRequest = { amount, merchant, item };
+        document.getElementById('hitlDesc').textContent = `${data.reason} (Token: ${data.approvalTokenRequired})`;
+        document.getElementById('hitlAlert').style.display = 'block';
+      } else {
+        document.getElementById('hitlAlert').style.display = 'none';
+        pendingApprovalToken = null;
+        pendingRequest = null;
+        await loadOrders();
+      }
+    }
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      const amount = parseFloat(document.getElementById('amountInput').value) || 20;
+      const merchant = document.getElementById('merchantSelect').value;
+      const item = document.getElementById('itemDesc').value;
+      triggerPurchase(amount, merchant, item, null);
+    });
+
+    document.getElementById('quick150Btn').addEventListener('click', () => {
+      document.getElementById('amountInput').value = '250.00';
+      const merchant = document.getElementById('merchantSelect').value;
+      const item = document.getElementById('itemDesc').value;
+      triggerPurchase(250.00, merchant, item, null);
+    });
+
+    document.getElementById('hitlConfirmBtn').addEventListener('click', () => {
+      if (pendingRequest && pendingApprovalToken) {
+        triggerPurchase(pendingRequest.amount, pendingRequest.merchant, pendingRequest.item, pendingApprovalToken);
+      }
+    });
+
+    document.getElementById('releaseEscrowBtn').addEventListener('click', async () => {
+      const orderId = document.getElementById('escrowOrderSelect').value;
+      const proofHash = document.getElementById('deliveryProofInput').value;
+
+      if (!orderId) {
+        alert('Please select an order in escrow to release.');
+        return;
+      }
+
+      const res = await fetch('/api/release-escrow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, deliveryProofHash: proofHash })
+      });
+
+      const data = await res.json();
+      document.getElementById('mcpLog').textContent = JSON.stringify(data, null, 2);
+      await loadOrders();
+    });
+
+    document.getElementById('refreshLedgerBtn').addEventListener('click', loadOrders);
+
+    // Initial Load
+    loadOrders();
+  </script>
+</body>
+</html>

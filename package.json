@@ -1,0 +1,23 @@
+{
+  "name": "payagent-core",
+  "version": "1.0.0",
+  "description": "Autonomous Agentic Commerce & EscrowGuard Protocol for PayPal AI Hackathon",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "test": "npm run typecheck && tsx test/verify_payagent.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
+  },
+  "license": "MIT"
+}
